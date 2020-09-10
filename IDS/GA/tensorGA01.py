@@ -3,6 +3,7 @@ import random
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
+import tensorflow as tf
 
 input_path = 'E:\\论文\\小论文两篇\\GA实验\\train_data_scaler.csv'
 
@@ -331,28 +332,28 @@ def mutation(population):
 
 
 if __name__ == '__main__':
-    for nr_select in range(nr_feature):
-        for count in range(10):
-            best_people, best_fitness, fitness_change, best_population = GA(nr_select)
-            choice = np.zeros(nr_select)
-            k = 0
-            print("在取%d维的时候，通过遗传算法得出的最优适应度值为：%.6f" % (nr_select, best_fitness))
-            print("选出的最优染色体为：")
-            print(best_people)
-            for j in range(nr_feature):
-                if best_people[j] == 1:
-                    choice[k] = j + 1
-                    k += 1
-            print("选出的最优特征为：")
 
-            print(choice)
-            print('------------------------------------------------------')
-        print('十轮运行完毕.')
+    # for count in range(10):
+    best_people, best_fitness, fitness_change, best_population = GA(nr_select)
+    choice = np.zeros(nr_select)
+    k = 0
+    print("在取%d维的时候，通过遗传算法得出的最优适应度值为：%.6f" % (nr_select, best_fitness))
+    print("选出的最优染色体为：")
+    print(best_people)
+    for j in range(nr_feature):
+        if best_people[j] == 1:
+            choice[k] = j + 1
+            k += 1
+    print("选出的最优特征为：")
+    print(choice)
+    print('------------------------------------------------------')
 
-        # # 画图
-        # x = np.arange(0, t, 1)
-        # plt.xlabel('dimension')
-        # plt.ylabel('fitness')
-        # plt.ylim((min(fitness_change), max(fitness_change)))  # y坐标的范围
-        # plt.plot(x, fitness_change, 'b')
-        # plt.show()
+    # print('十轮运行完毕.')
+
+    # # 画图
+    x = np.arange(0, t, 1)
+    plt.xlabel('dimension')
+    plt.ylabel('fitness')
+    plt.ylim((min(fitness_change), max(fitness_change)))  # y坐标的范围
+    plt.plot(x, fitness_change, 'b')
+    plt.show()

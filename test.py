@@ -2,6 +2,10 @@ import numpy as np
 import pandas as pd
 import time
 
+
+for i in range(10):
+    print(i)
+
 #
 # name = np.array(
 #     ['Dst Port', 'Protocol', 'Timestamp', 'Flow Duration', 'Tot Fwd Pkts', 'Tot Bwd Pkts', 'TotLen Fwd Pkts',
@@ -102,21 +106,21 @@ import time
 # print(s_from_list4.index)
 
 
-input_path = 'C:\\Users\\Administrator\\Desktop\\cicids2018\\Thursday-01-03-2018_TrafficForML_CICFlowMeter.csv'
-output_path = 'C:\\Users\\Administrator\\Desktop\\out.bcp'
-
-# 读取数据文件并进行分离
-# ids_data = pd.read_csv(input_path, encoding='utf-8').drop(columns='Timestamp')
-# ids_data_Benign = ids_data[ids_data.loc[:, 'Label'] == 'Benign'].drop(columns='Label')
-# ids_data_Infilteration = ids_data[ids_data.loc[:, 'Label'] == 'Infilteration'].drop(columns='Label')
-
-population = np.zeros((200, 78), dtype=np.int)
-for i in range(200):  # 定义种群的个体数为 n
-    a = np.zeros(78 - 40, dtype=np.int)  # 生成未被选择的特征
-    b = np.ones(40, dtype=np.int)  # 将选择的d维特征定义为个体c中的1
-    c = np.append(a, b)
-    c = (np.random.permutation(c.T)).T  # 随机生成一个d维的个体
-    population[i] = c  # 初代的种群为 population，共有n个个体
+# input_path = 'C:\\Users\\Administrator\\Desktop\\cicids2018\\Thursday-01-03-2018_TrafficForML_CICFlowMeter.csv'
+# output_path = 'C:\\Users\\Administrator\\Desktop\\out.bcp'
+#
+# # 读取数据文件并进行分离
+# # ids_data = pd.read_csv(input_path, encoding='utf-8').drop(columns='Timestamp')
+# # ids_data_Benign = ids_data[ids_data.loc[:, 'Label'] == 'Benign'].drop(columns='Label')
+# # ids_data_Infilteration = ids_data[ids_data.loc[:, 'Label'] == 'Infilteration'].drop(columns='Label')
+#
+# population = np.zeros((200, 78), dtype=np.int)
+# for i in range(200):  # 定义种群的个体数为 n
+#     a = np.zeros(78 - 40, dtype=np.int)  # 生成未被选择的特征
+#     b = np.ones(40, dtype=np.int)  # 将选择的d维特征定义为个体c中的1
+#     c = np.append(a, b)
+#     c = (np.random.permutation(c.T)).T  # 随机生成一个d维的个体
+#     population[i] = c  # 初代的种群为 population，共有n个个体
 
 
 
