@@ -1,7 +1,8 @@
+import random
+
+import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-import random
-import matplotlib.pyplot as plt
 
 input_path = 'C:\\Users\\Administrator\\Desktop\\cicids2018\\Thursday-01-03-2018_TrafficForML_CICFlowMeter.csv'
 
@@ -46,18 +47,23 @@ nr_feature = ids_data_Benign.shape[1]
 # ids_data_Benign = np.mat(ids_data_Benign)
 # ids_data_Infilteration = np.mat(ids_data_Infilteration)
 
-# 变异率、迭代次数、初始种群大小
-pc = 0.02
+# 交叉概率、变异概率、迭代次数、初始种群大小
+pc = 0.25
+pm = 0.01
 t = 50
-n = 200
+n = 100
 
 # 待选择的特征数
-nr_select = 50
+nr_select = 5
 
 
 # 遗传算法
 # d: 待选择的字段数目
 def GA(d):
+    if d > nr_feature:
+        print('所选择的特征数量大于数据集特征的总数量，请检查')
+        exit(1)
+
     # 随机生成一个种群，每个个体的特征都是随机选择的
     population_t = np.zeros((n, nr_feature), dtype=np.int)
     for i in range(n):  # 定义种群的个体数为 n
@@ -74,7 +80,7 @@ def GA(d):
         fitness = np.zeros(n)  # fitness为每一个个体的适应度值
         for j in range(n):
             fitness[j] = Jd(population_t[j], d)  # 计算每一个体的适应度值
-        population_t = selection(population_t, fitness)  # 通过概率选择产生新一代的种群
+        population_t = selection(population_t, fitness)  # 通过轮盘赌选择产生新一代的种群
         population_t = crossover(population_t)  # 通过交叉产生新的个体
         population_t = mutation(population_t)  # 通过变异产生新个体
         fitness_change_t[i] = max(fitness)  # 找出每一代的适应度最大的染色体的适应度值
@@ -84,6 +90,11 @@ def GA(d):
     best_fitness_t = max(fitness)
     best_people_t = population_t[fitness.argmax()]
 
+    # 返回：
+    # - best_people_t 最大适度的染色体
+    # - best_fitness_t 最大适度值
+    # - fitness_change_t 适度值在训练过程中的变化
+    # - population_t 最大适度值的种群
     return best_people_t, best_fitness_t, fitness_change_t, population_t
 
 
@@ -91,8 +102,8 @@ def GA(d):
 # - x: 个体
 # - d: 待选择的特征数量
 def Jd(x, d):
-    # 从特征向量x中提取出相应的特征
     feature_index = np.zeros(d, dtype=np.int)  # 数组Feature用来存 x选择的是哪d个特征
+    # 从特征向量x中提取出被选中的特征索引
     k = 0
     for i in range(nr_feature):
         if x[i] == 1:
@@ -135,7 +146,6 @@ def Jd(x, d):
     # j1 = np.trace(Sb)
     # j2 = np.trace(Sw)
     # Jd = j1 / j2
-
     return np.trace(Sb) / np.trace(Sw)
 
 
@@ -166,7 +176,7 @@ def selection(population, fitness):
 
 # 交叉操作
 def crossover(population):
-    father = population[0:int(n/3), :]
+    father = population[0:int(n * pc), :]  # 对pc比率的个体进行交叉
     mother = population[len(father):, :]
     np.random.shuffle(father)  # 将父代个体按行打乱以随机配对
     np.random.shuffle(mother)
@@ -175,7 +185,7 @@ def crossover(population):
         mother_1 = mother[i]
         one_zero = []
         zero_one = []
-        for j in range(nr_feature):  # 遍历每一个特征，iris一共四个特征
+        for j in range(nr_feature):  # 遍历每一个特征
             if father_1[j] == 1 and mother_1[j] == 0:
                 one_zero.append(j)
             if father_1[j] == 0 and mother_1[j] == 1:
@@ -201,7 +211,7 @@ def crossover(population):
 def mutation(population):
     for i in range(n):
         c = np.random.uniform(0, 1)
-        if c <= pc:
+        if c <= pm:
             mutation_s = population[i]
             zero = []  # zero存的是变异个体中第几个数为0
             one = []  # one存的是变异个体中第几个数为1
@@ -224,23 +234,28 @@ def mutation(population):
 
 
 if __name__ == '__main__':
-    best_people, best_fitness, fitness_change, best_population = GA(nr_select)
-    choice = np.zeros(nr_select)
-    k = 0
-    print("在取%d维的时候，通过遗传算法得出的最优适应度值为：%.6f" % (nr_select, best_fitness))
-    print("选出的最优染色体为：")
-    print(best_people)
-    for j in range(nr_feature):
-        if best_people[j] == 1:
-            choice[k] = j + 1
-            k += 1
-    print("选出的最优特征为：")
-    print(choice)
 
-    # 画图
-    x = np.arange(0, t, 1)
-    plt.xlabel('dimension')
-    plt.ylabel('fitness')
-    plt.ylim((min(fitness_change), max(fitness_change)))  # y坐标的范围
-    plt.plot(x, fitness_change, 'b')
-    plt.show()
+    for count in range(10):
+        best_people, best_fitness, fitness_change, best_population = GA(nr_select)
+        choice = np.zeros(nr_select)
+        k = 0
+        print("在取%d维的时候，通过遗传算法得出的最优适应度值为：%.6f" % (nr_select, best_fitness))
+        print("选出的最优染色体为：")
+        print(best_people)
+        for j in range(nr_feature):
+            if best_people[j] == 1:
+                choice[k] = j + 1
+                k += 1
+        print("选出的最优特征为：")
+        print(choice)
+        print('------------------------------------------------------')
+
+    print('十轮运行完毕.')
+
+    # # 画图
+    # x = np.arange(0, t, 1)
+    # plt.xlabel('dimension')
+    # plt.ylabel('fitness')
+    # plt.ylim((min(fitness_change), max(fitness_change)))  # y坐标的范围
+    # plt.plot(x, fitness_change, 'b')
+    # plt.show()
