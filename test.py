@@ -2,9 +2,19 @@ import numpy as np
 import pandas as pd
 import time
 
+count = {}
 
-for i in range(10):
-    print(i)
+t = np.array((0, 1, 0, 2, 0, 3, 0, 2, 3, 0))
+
+
+
+for s in t:
+    count[s] += 1
+
+# count[1] = 111111
+# count[1.0] += 111111
+
+print(count)
 
 #
 # name = np.array(
@@ -121,7 +131,6 @@ for i in range(10):
 #     c = np.append(a, b)
 #     c = (np.random.permutation(c.T)).T  # 随机生成一个d维的个体
 #     population[i] = c  # 初代的种群为 population，共有n个个体
-
 
 
 # # 取得各个样本的数量和总体样本的数量

@@ -19,6 +19,7 @@ ids_data_3 = ids_data[ids_data.loc[:, 'Label'] == 'three'].drop(columns='Label')
 ids_data_4 = ids_data[ids_data.loc[:, 'Label'] == 'four'].drop(columns='Label')
 ids_data_5 = ids_data[ids_data.loc[:, 'Label'] == 'five'].drop(columns='Label')
 
+ids_data = ids_data.drop(columns='Label')
 # 取部分数据
 # len_Benign = int(ids_data_Benign.__len__() / 100)
 # len_Infilteration = int(ids_data_Infilteration.__len__() / 100)
@@ -33,7 +34,7 @@ ids_data_5 = ids_data[ids_data.loc[:, 'Label'] == 'five'].drop(columns='Label')
 
 # ids_data = ids_data.iloc[np.append(ids_data_Benign._stat_axis.values, ids_data_Infilteration._stat_axis.values), :]
 
-rat = 100
+rat = 1000
 
 len_1 = int(ids_data_1.__len__() / rat)
 len_2 = int(ids_data_2.__len__() / rat)
@@ -93,11 +94,11 @@ nr_feature = ids_data_1.shape[1]
 # 交叉概率、变异概率、迭代次数、初始种群大小
 pc = 0.25
 pm = 0.01
-t = 50
+t = 200
 n = 100
 
 # 待选择的特征数
-nr_select = 2
+nr_select = 50
 
 
 # 遗传算法
@@ -331,28 +332,58 @@ def mutation(population):
 
 
 if __name__ == '__main__':
-    for nr_select in range(nr_feature):
-        for count in range(10):
-            best_people, best_fitness, fitness_change, best_population = GA(nr_select)
-            choice = np.zeros(nr_select)
-            k = 0
-            print("在取%d维的时候，通过遗传算法得出的最优适应度值为：%.6f" % (nr_select, best_fitness))
-            print("选出的最优染色体为：")
-            print(best_people)
-            for j in range(nr_feature):
-                if best_people[j] == 1:
-                    choice[k] = j + 1
-                    k += 1
-            print("选出的最优特征为：")
 
-            print(choice)
-            print('------------------------------------------------------')
-        print('十轮运行完毕.')
+    # bf = []
+    # count = {}
+    #
+    # for index in range(nr_feature):
+    #     count[index] = 0
+    #
+    # for nr_select in range(60, 69):
+    #     sf = 0
+    #     for c in range(10):
+    #         best_people, best_fitness, fitness_change, best_population = GA(nr_select)
+    #         sf += best_fitness
+    #         choice = np.zeros(nr_select)
+    #         k = 0
+    #         print("在取%d维的时候，通过遗传算法得出的最优适应度值为：%.6f" % (nr_select, best_fitness))
+    #         print("选出的最优染色体为：")
+    #         print(best_people)
+    #         for j in range(nr_feature):
+    #             if best_people[j] == 1:
+    #                 choice[k] = j + 1
+    #                 count[j] += 1
+    #                 k += 1
+    #         print("选出的最优特征为：")
+    #         print(choice)
+    #         print('------------------------------------------------------')
+    #
+    #
+    #     bf.append(sf / 10)
+    #     print('十轮运行完毕.')
+    #
+    # print(bf)
+    # print('-------------------------')
+    # print(count)
 
-        # # 画图
-        # x = np.arange(0, t, 1)
-        # plt.xlabel('dimension')
-        # plt.ylabel('fitness')
-        # plt.ylim((min(fitness_change), max(fitness_change)))  # y坐标的范围
-        # plt.plot(x, fitness_change, 'b')
-        # plt.show()
+    best_people, best_fitness, fitness_change, best_population = GA(nr_select)
+    choice = np.zeros(nr_select)
+    k = 0
+    print("在取%d维的时候，通过遗传算法得出的最优适应度值为：%.6f" % (nr_select, best_fitness))
+    print("选出的最优染色体为：")
+    print(best_people)
+    for j in range(nr_feature):
+        if best_people[j] == 1:
+            choice[k] = j + 1
+            k += 1
+    print("选出的最优特征为：")
+    print(choice)
+    print('------------------------------------------------------')
+
+    # # 画图
+    x = np.arange(0, t, 1)
+    plt.xlabel('dimension')
+    plt.ylabel('fitness')
+    plt.ylim((min(fitness_change), max(fitness_change) * 1.01))  # y坐标的范围
+    plt.plot(x, fitness_change, 'black')
+    plt.show()
