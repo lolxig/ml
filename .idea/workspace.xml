@@ -58,6 +58,9 @@
       <module name="ml" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
       <option name="SDK_HOME" value="" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/IDS/GA" />
       <option name="IS_MODULE_SDK" value="true" />
@@ -215,6 +218,7 @@
       <workItem from="1599756646876" duration="632000" />
       <workItem from="1599762230648" duration="15499000" />
       <workItem from="1600179671875" duration="2782000" />
+      <workItem from="1600495462571" duration="11000" />
     </task>
     <task id="LOCAL-00001" summary="dsadasda">
       <created>1595324796959</created>
