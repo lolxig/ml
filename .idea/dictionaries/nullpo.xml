@@ -2,6 +2,7 @@
   <dictionary name="nullpo">
     <words>
       <w>iloc</w>
+      <w>npsum</w>
     </words>
   </dictionary>
 </component>
